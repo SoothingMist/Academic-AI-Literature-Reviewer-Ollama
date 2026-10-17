@@ -7116,21 +7116,21 @@ Respond with ONLY the title text."""
 def print_banner():
     p = get_primary_llm_config().get("model_name", "?")
     print(f"""
-{Fore.CYAN}\u2554{'═'*66}\u2557
+{Fore.CYAN}\u2554{'═'*67}\u2557
 \u2551  {Fore.WHITE}ACADEMIC LITERATURE REVIEW SYSTEM{Fore.CYAN}                                \u2551
 \u2551  {Fore.YELLOW}APA 7th — Quote-Driven with Attribution Verification{Fore.CYAN}             \u2551
-\u2551                                                                    \u2551
-\u2551  {Fore.YELLOW}\u2022 Model: {p:<46}{Fore.CYAN}     \u2551
+{Fore.CYAN}\u2551{' '*67}\u2551
+\u2551  {Fore.YELLOW}\u2022 Model: {p:<46}{Fore.CYAN}{' '*10}\u2551
 \u2551  {Fore.YELLOW}\u2022 Main mode requires full text; abstracts only in tangential{Fore.CYAN}     \u2551
 \u2551  {Fore.YELLOW}\u2022 Tangential gated against unrelated cross-domain picks{Fore.CYAN}          \u2551
-\u2551                                                                    \u2551
-\u255A{'═'*66}\u255D{Style.RESET_ALL}
+{Fore.CYAN}\u2551{' '*67}\u2551
+\u255A{'═'*67}\u255D{Style.RESET_ALL}
 """)
 
 
 def main():
-    import warnings
-    warnings.filterwarnings("ignore", category=UserWarning, module="langchain_core")
+    #import warnings
+    #warnings.filterwarnings("ignore", category=UserWarning, module="langchain_core")
 
     # Per-run verbose logging is now handled by SessionLogger inside
     # pipeline.run(), which writes a complete Logs/<Review_Name>.txt transcript
