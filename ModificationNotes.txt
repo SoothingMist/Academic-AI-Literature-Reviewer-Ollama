@@ -1,0 +1,28 @@
+
+Modifications
+=============
+
+
+
+10/16/2026
+
+Running on a low-end computer, relative to this type of application.
+Dell Alienware Aurora R9
+OS: Windows 11 - Fully Updated - 64Bit x64
+CPU: Intel Core i9-9900K 3.60GHz
+RAM: 32.0GB
+GPU: NVIDIA GeForce RTX 2060 6GB Memory
+
+Made the following modifications to academic_config.py:
+Line  15: added my_email variable for use in places where email is required.
+Line  39: changed default LLM to gwen 8B model.
+Line 102: changed default to "yes".
+
+Made first run with this question:
+What are ways to detect "fall armyworm" early? Restrict paper retrieval to the years 2023 through 2026 inclusive.
+Did not use any source that required an API key.
+Run took 100 minutes.
+Per original author's statement, results would be much better with a much-larger model and a high-end machine.
+But, results did meet basic project success criteria.
+Not a publishable result but someone with understanding of topic would benefit.
+
