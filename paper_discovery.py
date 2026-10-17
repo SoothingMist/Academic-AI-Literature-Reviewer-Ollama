@@ -1087,8 +1087,8 @@ class PaperDiscoveryEngine:
 
     def _extract_pdf_text(self, path: str) -> Optional[str]:
         try:
-            import fitz
-            doc = fitz.open(path)
+            import pymupdf
+            doc = pymupdf.open(path)
             parts = [page.get_text() for page in doc]
             doc.close()
             return "\n".join(parts)
@@ -1098,7 +1098,7 @@ class PaperDiscoveryEngine:
                 with pdfplumber.open(path) as pdf:
                     return "\n".join(p.extract_text() or "" for p in pdf.pages)
             except ImportError:
-                logger.error("No PDF library. pip install PyMuPDF")
+                logger.error("No PDF library. pip install pymupdf")
                 return None
         except Exception as e:
             logger.error(f"PDF error: {e}")

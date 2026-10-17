@@ -22,11 +22,11 @@ except ImportError:
 
 # For PDF support
 try:
-    import fitz  # PyMuPDF
+    import pymupdf
     HAS_PDF = True
 except ImportError:
     HAS_PDF = False
-    print("Warning: PyMuPDF not installed. PDF support disabled. Install with: pip install pymupdf")
+    print("Warning: pymupdf not installed. PDF support disabled. Install with: pip install pymupdf")
 
 # For DOCX support
 try:
@@ -242,10 +242,10 @@ class DocumentStore:
     def _extract_pdf(self, file_path: str) -> str:
         """Extract text from PDF"""
         if not HAS_PDF:
-            raise ImportError("PyMuPDF required for PDF. Install with: pip install pymupdf")
+            raise ImportError("pymupdf required for PDF. Install with: pip install pymupdf")
         
         text_parts = []
-        with fitz.open(file_path) as pdf:
+        with pymupdf.open(file_path) as pdf:
             for page in pdf:
                 text_parts.append(page.get_text())
         return "\n".join(text_parts)
