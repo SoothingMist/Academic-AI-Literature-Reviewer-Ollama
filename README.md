@@ -1,3 +1,8 @@
+
+Modifications to this fork are noted in ModificationNotes.txt
+
+Original Author's ReadMe:
+
 # Academic-AI-Literature-Reviewer-Ollama
 
 ## Demonstration
