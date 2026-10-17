@@ -12,6 +12,8 @@
 
 import os
 
+my_email = "peter_raeth@juno.com" # used for various search-site configurations
+
 # =============================================================================
 # PRIMARY LLM CONFIG (Analysis, Planning, Synthesis, Verification)
 # =============================================================================
@@ -24,13 +26,24 @@ PRIMARY_LLM_CONFIG = {
     # Any model you have pulled in Ollama. Qwen3 is the default because it is a
     # native thinking model, which this pipeline's task profiles are tuned
     # around (see TASK_PROFILES: several stages set think ON deliberately).
-    # Override without editing this file:  export ACADEMIC_LLM_MODEL="..."
-    "model_name": os.environ.get("ACADEMIC_LLM_MODEL", "qwen3:32b"),
-    "temperature": 0.1,
+    # Can override without editing this file:  export ACADEMIC_LLM_MODEL="...".
+
+    # This is a BIG model, and is most suitable.
+    # But it will not run on lower-end machines.
+    # See below. Set LOW_END_CONFIG / "low_end_device_mode" to "no".
+    #"model_name": os.environ.get("ACADEMIC_LLM_MODEL", "qwen3:32b"),
+
+    # This is a smaller model, and is not as suitable.
+    # But it will run on a lower-end machine.
+    # See below. Set LOW_END_CONFIG / "low_end_device_mode" to "yes".
+    "model_name": os.environ.get("ACADEMIC_LLM_MODEL", "qwen3:latest"),
+
+
+    "temperature": 0.0, # originally set to 0.1
     "top_p": 0.9,
     "n_ctx": 65536,
     "max_tokens": 8192,
-    "stop": [],
+    "stop": []
 }
 
 # =============================================================================
@@ -83,9 +96,10 @@ THINKING_CONFIG = {
 # therefore reviews a focused corpus rather than a 200-paper sweep. Raise these
 # caps if your small device has more headroom.
 LOW_END_CONFIG = {
-    # MASTER TOGGLE — simple yes/no. "no" (default) = full behaviour, unchanged,
-    # for the big machine. "yes" = chunked low-end mode for a small device.
-    "low_end_device_mode": "no",
+    # MASTER TOGGLE — simple yes/no. "no" (default).
+    # Full behaviour, unchanged, leave at "no" for the big machine.
+    # Set to "yes" = low-end mode for a small device.
+    "low_end_device_mode": "yes",
 
     # Context window of the small device's model. Every call is capped here and
     # the chunk budgets below keep each call's input comfortably under it.
@@ -325,7 +339,7 @@ SEARCH_APIS = {
     "openalex": {
         "enabled": True,
         "base_url": "https://api.openalex.org",
-        "email": os.environ.get("OPENALEX_EMAIL", ""),
+        "email": os.environ.get("OPENALEX_EMAIL", my_email),
         "results_per_page": 25,
         "max_pages": 3,
         "rate_limit_delay": 0.2,
@@ -341,7 +355,7 @@ SEARCH_APIS = {
     "unpaywall": {
         "enabled": True,
         "base_url": "https://api.unpaywall.org/v2",
-        "email": os.environ.get("UNPAYWALL_EMAIL", ""),
+        "email": os.environ.get("UNPAYWALL_EMAIL", my_email),
         "rate_limit_delay": 0.1,
     },
     "europe_pmc": {
@@ -354,7 +368,7 @@ SEARCH_APIS = {
     "crossref": {
         "enabled": True,
         "base_url": "https://api.crossref.org",
-        "email": os.environ.get("CROSSREF_EMAIL", ""),
+        "email": os.environ.get("CROSSREF_EMAIL", my_email),
         "results_per_page": 20,
         "max_pages": 2,
         "rate_limit_delay": 0.15,
