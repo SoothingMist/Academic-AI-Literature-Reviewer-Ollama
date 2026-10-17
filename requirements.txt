@@ -25,7 +25,7 @@ langgraph>=0.2.0
 
 # PDF text extraction. This is how papers actually get read.
 # Without it, only HTML/abstract sources work and most papers will be skipped.
-PyMuPDF>=1.23.0
+pymupdf>=1.28.2 # security flaw has been fixed
 
 # BM25 retrieval, used by the document store to locate quote candidates
 # inside long papers. Without it, quote location falls back to slower scanning.
