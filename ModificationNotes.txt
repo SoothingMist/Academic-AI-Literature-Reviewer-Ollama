@@ -3,6 +3,19 @@ Modifications
 =============
 
 
+10/17/2026
+
+Modified document_store.py and paper_discovery.py to change deprecated fitz library to pymupdf.
+PyCharm Community reports pymupdf as having a security flaw but that flaw was fixed in commit b2c8f3a.
+See https://www.mend.io/vulnerability-database/CVE-2026-82035/?utm_source=Jetbrains.
+
+Modified Academic_Researcher.py in main() to enable all warnings.
+
+Modified Academic_Researcher.py in print_banner() to replace print tabs with blanks.
+
+Modified requirements.txt, Line 28 to read: pymupdf>=1.28.2 # security flaw has been fixed.
+This ensures the latest install, the one that fixes the security flaw.
+
 
 10/16/2026
 
@@ -23,6 +36,6 @@ What are ways to detect "fall armyworm" early? Restrict paper retrieval to the y
 Did not use any source that required an API key.
 Run took 100 minutes.
 Per original author's statement, results would be much better with a much-larger model and a high-end machine.
-But, results did meet basic project success criteria.
+Results did meet basic project success criteria.
 Not a publishable result but someone with understanding of topic would benefit.
 
