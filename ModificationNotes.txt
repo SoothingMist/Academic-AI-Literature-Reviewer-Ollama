@@ -3,6 +3,16 @@ Modifications
 =============
 
 
+10/19/2026
+
+Line 695 in paper_discovery.py lists the sites to be searched.
+Commented out semantic_scholar and core since each of those require an API key. One can uncomment those if one wishes to subscribe to them. Be sure to update academic_config.py to add the API keys.
+
+Added block of code to assist with tracing function calls pursuant to modification.
+See top of Academic_Researcher.py for enabling or disabling the trace.
+
+
+
 10/17/2026
 
 Modified document_store.py and paper_discovery.py to change deprecated fitz library to pymupdf.
@@ -21,7 +31,7 @@ This ensures the latest install, the one that fixes the security flaw.
 
 Running on a low-end computer, relative to this type of application.
 Dell Alienware Aurora R9
-OS: Windows 11 - Fully Updated - 64Bit x64
+OS:  Windows 11 - Fully Updated - 64Bit x64
 CPU: Intel Core i9-9900K 3.60GHz
 RAM: 32.0GB
 GPU: NVIDIA GeForce RTX 2060 6GB Memory
