@@ -692,9 +692,11 @@ class PaperDiscoveryEngine:
         self.clients = {}
         self.api_stats = {}
 
-        for name, cls in [("semantic_scholar", SemanticScholarClient),
-                          ("openalex", OpenAlexClient), ("core", COREClient),
-                          ("europe_pmc", EuropePMCClient), ("crossref", CrossrefClient)]:
+        for name, cls in [#("semantic_scholar", SemanticScholarClient), # requires api key
+                          ("openalex", OpenAlexClient),
+                          #("core", COREClient),                        # requires api key
+                          ("europe_pmc", EuropePMCClient),
+                          ("crossref", CrossrefClient)]:
             cfg = config.get(name, {})
             if cfg.get("enabled", True):
                 self.clients[name] = cls(cfg)
