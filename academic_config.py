@@ -12,7 +12,7 @@
 
 import os
 
-my_email = "< your email address goes here >" # used for various search-site configurations
+my_email = "peter_raeth@juno.com" # used for various search-site configurations
 
 # =============================================================================
 # PRIMARY LLM CONFIG (Analysis, Planning, Synthesis, Verification)
@@ -373,6 +373,14 @@ SEARCH_APIS = {
         "max_pages": 2,
         "rate_limit_delay": 0.15,
     },
+    "Arxiv": {
+        "enabled": True,
+        "base_url": "https://arxiv.org/search", # not explicitly used
+        "email": os.environ.get("OPENALEX_EMAIL", my_email),
+        "results_per_page": 20,
+        "max_pages": 3,  # max papers returned equals results_per_page * max_pages
+        "rate_limit_delay": 3.0
+    }
 }
 
 # =============================================================================

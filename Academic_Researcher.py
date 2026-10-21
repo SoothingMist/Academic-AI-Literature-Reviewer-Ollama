@@ -611,8 +611,8 @@ class AcademicReviewPipeline:
     self.discovery = PaperDiscoveryEngine()
     self.planner = ResearchPlanner(self.agent_manager)
     self.study_analyzer = StudyAnalyser(self.agent_manager)
-    self.reference_harvester = ReferenceHarvester(
-      self.discovery, self.agent_manager, self.study_analyzer, self.config)
+    self.reference_harvester =\
+      ReferenceHarvester(self.discovery, self.agent_manager, self.study_analyzer, self.config)
 
     # Attribution-check helpers — separate doc store so we don't interfere
     # with the StudyAnalyser's doc store during deep_analysis.

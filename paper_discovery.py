@@ -17,6 +17,8 @@ import logging
 import hashlib
 import re
 import threading
+
+import arxiv
 import requests
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, field
@@ -559,6 +561,7 @@ class CrossrefClient:
                             papers_found=len(papers), papers=papers,
                             error=error, response_time=time.time() - start_time)
 
+
     def _parse(self, item: Dict) -> Optional[PaperMetadata]:
         try:
             authors = []
@@ -607,6 +610,112 @@ class CrossrefClient:
                 external_ids=ext_ids)
         except Exception as e:
             logger.debug(f"Crossref parse error: {e}")
+            return None
+
+
+class ArxivClient:
+
+    # Arxiv API — free, no auth, mailto for polite pool (3 sec request delay).
+
+    def __init__(self, config: Dict):
+        self.base_url = config.get("base_url", "https://arxiv.org/search")
+        self.email = _usable_email(config.get("email"))
+        self.results_per_page = config.get("results_per_page", 20)
+        self.max_pages = config.get("max_pages", 2)
+        self.rate_limit_delay = config.get("rate_limit_delay", 0.15)
+
+    def search(self, query: str, limit: int = None) -> SearchResult:
+
+      if limit is None: limit = self.results_per_page
+      start_time = time.time()
+      papers, error = [], None
+      try: # this is where the retrieval takes place
+          total_to_fetch = min(limit, self.results_per_page * self.max_pages)
+          papers = self.search_arxiv(query, total_to_fetch)
+      except Exception as e:
+          error = str(e)
+
+      return SearchResult(query=query, api_name="Arxiv",
+                          papers_found=len(papers), papers=papers,
+                          error=error, response_time=time.time() - start_time)
+
+    def search_arxiv(self, query, max_results=5):
+
+        # Search arXiv for papers associated with a query.
+
+        import arxiv
+        import urllib.request
+
+        # Create a custom User-Agent identifying your script name and email address.
+        CUSTOM_USER_AGENT = f"MyResearchScript/1.0 (mailto:{self.email})"
+
+        # Override the default URL opener globally for the current Python session.
+        # Any request sent via the arxiv library carries the CUSTOM_USER_AGENT identity header.
+        opener = urllib.request.build_opener()
+        opener.addheaders = [('User-Agent', CUSTOM_USER_AGENT)]
+        urllib.request.install_opener(opener)
+
+        # Initialize the arXiv client
+        client = \
+            arxiv.Client(page_size=self.results_per_page,  # max papers per page
+                         delay_seconds=self.rate_limit_delay,  # seconds of delay between requests
+                         num_retries=3  # max network retries
+                         )
+
+        # Define the search criteria.
+        index = query.rfind(' ')
+        query_text = query[0 : index]
+        start_date = query[index + 1 : index + 5] + "01010000"
+        end_date = query[query.rfind('-') + 1 : ] + "12312359"
+        query = f'(ti:{query_text} OR abs:{query_text}) AND submittedDate:[{start_date} TO {end_date}]'
+        print(f"Searching Arxiv for: '{query}'...")
+        search = \
+            arxiv.Search(
+                query=query,
+                max_results=max_results,
+                sort_by=arxiv.SortCriterion.Relevance
+            )
+
+        # Execute the search and process the results.
+        search_results = []
+        papers = []
+        for result in client.results(search):
+            # Clean the title to make a safe filename
+            safe_title = "".join(c for c in result.title if c.isalnum() or c in (" ", "_", "-")).rstrip()
+            result.title = safe_title
+            search_results.append(result)
+            print(f"\nFound: {result.title}, ({result.published.year})")
+            print(f"PDF URL: {result.pdf_url}")
+            # Format the result for later use.
+            p = self._parse(result)
+            if p: papers.append(p)
+
+        return papers
+
+
+    def _parse(self, item: arxiv.Result) -> Optional[PaperMetadata]:
+        try:
+            authors = [author.name for author in item.authors]
+            doi = item.doi
+            title = item.title
+            year = item.published.year
+            venue = item.journal_ref
+            abstract = item.summary
+            if abstract: # Strip JATS XML tags
+                abstract = re.sub(r'<[^>]+>', '', abstract).strip()
+            citation_count = None
+            pdf_url = item.pdf_url
+            ext_ids = {}
+            if doi: ext_ids["DOI"] = doi
+            return PaperMetadata(
+                title=title, authors=authors, year=year,
+                abstract=abstract if abstract else None,
+                doi=doi, venue=venue, citation_count=citation_count,
+                publication_types=[],
+                open_access_pdf_url=pdf_url, source_api="arxiv",
+                external_ids=ext_ids)
+        except Exception as e:
+            logger.debug(f"Arxiv parse error: {e}")
             return None
 
 
@@ -693,10 +802,11 @@ class PaperDiscoveryEngine:
         self.api_stats = {}
 
         for name, cls in [#("semantic_scholar", SemanticScholarClient), # requires api key
-                          ("openalex", OpenAlexClient),
+                          #("openalex", OpenAlexClient),
                           #("core", COREClient),                        # requires api key
-                          ("europe_pmc", EuropePMCClient),
-                          ("crossref", CrossrefClient)]:
+                          #("europe_pmc", EuropePMCClient),
+                          #("crossref", CrossrefClient),
+                          ("Arxiv", ArxivClient)]:
             cfg = config.get(name, {})
             if cfg.get("enabled", True):
                 self.clients[name] = cls(cfg)
@@ -751,7 +861,7 @@ class PaperDiscoveryEngine:
             result = self.search_single_api(query, api_name, limit=limit_per_api)
 
             if result.error:
-                print(f"    {Fore.RED}  {api_name}: {result.error}{Style.RESET_ALL}")
+                print(f"    {Fore.RED}Access Error:  {api_name}: {result.error}{Style.RESET_ALL}")
                 continue
 
             new_count = 0
