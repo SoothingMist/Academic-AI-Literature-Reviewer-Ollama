@@ -1,10 +1,11 @@
 
-************************************************************************
+
+***
 Modifications to this fork are noted in ModificationNotes.txt.
 Have run only on a low-end computer with a small model.
 Results are as expected but very informative. 
 Literature-Reviewer was written for a high-end machine and a large model.
-************************************************************************
+***
 
 Original Author's ReadMe:
 
