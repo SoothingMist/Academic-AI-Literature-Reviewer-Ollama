@@ -12,7 +12,7 @@
 
 import os
 
-my_email = "peter_raeth@juno.com" # used for various search-site configurations
+my_email = "<Your Email>" # used for various search-site configurations
 
 # =============================================================================
 # PRIMARY LLM CONFIG (Analysis, Planning, Synthesis, Verification)
