@@ -56,6 +56,7 @@ GPU: NVIDIA GeForce RTX 2060 6GB Memory
 Made the following modifications to academic_config.py:
 Line  15: added my_email variable for use in places where email is required.
 Line  39: changed default LLM to gwen 8B model.
+Line  42: changed temperature to 0.0.
 Line 102: changed default to "yes".
 
 Made first run with this question:
