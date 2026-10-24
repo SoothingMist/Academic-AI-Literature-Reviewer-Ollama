@@ -642,6 +642,8 @@ class ArxivClient:
     def search_arxiv(self, query, max_results=5):
 
         # Search arXiv for papers associated with a query.
+        # An alternative method for searching Arxiv is given in:
+        # https://github.com/cywu92/PaperCrawler
 
         import arxiv
         import urllib.request
@@ -663,18 +665,20 @@ class ArxivClient:
                          )
 
         # Define the search criteria.
+        """
         index = query.rfind(' ')
         query_text = query[0 : index]
         start_date = query[index + 1 : index + 5] + "01010000"
         end_date = query[query.rfind('-') + 1 : ] + "12312359"
         query = f'(ti:{query_text} OR abs:{query_text}) AND submittedDate:[{start_date} TO {end_date}]'
-        print(f"Searching Arxiv for: '{query}'...")
-        search = \
-            arxiv.Search(
-                query=query,
-                max_results=max_results,
-                sort_by=arxiv.SortCriterion.Relevance
-            )
+        print(f"Searching Arxiv for: '{query}' ...")
+        """
+        query = f'(ti:{query} OR abs:{query})'
+        search =arxiv.Search(
+            query=query,
+            max_results=max_results,
+            sort_by=arxiv.SortCriterion.Relevance
+        )
 
         # Execute the search and process the results.
         search_results = []
