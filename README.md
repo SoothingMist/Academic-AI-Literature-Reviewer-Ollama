@@ -1,7 +1,7 @@
 
 # Gaining Knowledge from the World's Literature
 
-Having taught college courses on three continents, one of the apparent barriers to learning is lack of access to the world's literature. Much of it is hidden behind expensive paywalls but an increasing portion is open-access. There are freely-accessible repositories that enable programmatic search and download of that literature. Vetted, peer-reviewed, papers and books can be retrieved in this way by individuals without cost. The project here searches open-access literature and produces a review of that literature, along with a local repository of the cited documents. It is a fork, a modification of, another author's project that I have come to respect.
+Having taught college courses on three continents, one of the clearly-apparent barriers to learning is lack of access to the world's literature. Much of it is hidden behind expensive paywalls but an increasing portion is open-access. There are freely-accessible repositories that enable programmatic search and download of that literature. High-quality, vetted, and peer-reviewed papers and books can be retrieved in this way by individuals without cost. The project here searches open-access literature and produces a review of that literature, along with a local repository of the cited documents. It is a fork, a modification of, another author's project that I have come to respect.
 
 ***Modifications to this fork are noted in ModificationNotes.txt.***  
 ***Have run only on a low-end computer with a small model.***  
