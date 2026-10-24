@@ -3,6 +3,18 @@ Modifications
 =============
 
 
+10/24/2026
+
+The original project's code has no provision for deterministically specifying the range of publication dates as a filter for searches. Am testing an attempt to add such a specification through the user prompt. Here is an example user prompt:
+
+Question: What are ways to detect "fall armyworm" early? Instructions: - Restrict paper retrieval dates to the years 2023 through 2026 inclusive. - Where "fall armyworm" is used in a search, maintain that as a quoted phrase. - Attach the retrieval date range to each search in this format: "(start year , end year)"
+
+This seems to be working well. An example generated search is: "fall armyworm" detection technology (2023, 2026)
+All other searches in the test run contained the date range in that format.
+
+Present testing is with Arxiv. If all continues to work well, will expand to the other repositories that do not require an API key.
+
+
 10/21/2026
 
 Added Arxiv as a new search agent.
