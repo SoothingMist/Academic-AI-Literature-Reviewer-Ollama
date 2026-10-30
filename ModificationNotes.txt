@@ -3,6 +3,20 @@ Modifications
 =============
 
 
+10/30/2026
+
+Modified paper_discovery.py, PaperDiscoveryEngine/_download_and_extract, so that a paper is only downloaded if the paper is not in the database of papers already downloaded. As papers are downloaded, their pdf and txt versions are stored. This does take up more disk space but creates a type of memory for evolving user prompts on the same topic. It also saves data costs and hits the repositories less often. Also potentially mitigated is the possibility of duplicate papers from different repositories, although a checklist of papers employed while answering a user question is not maintained at the present time.
+
+Evolved the user prompt used to exercise the software:
+Question: What are ways to detect "fall armyworm" early? Instructions: - Restrict paper retrieval dates to the years 2023 through 2026 inclusive. - Where "fall armyworm" appears in a search query, "fall armyworm" must be maintained as a quoted phrase. - Attach the retrieval date range to the end of each search query by using this format: "(start year , end year)"
+
+Ran only with Arvix source. Run took 2.52 hours, including download and text extraction, on this limited equipment. Nothing else was using the GPU or RAM so the result was much better than usual. First run was with an empty archive. Second run was made with the archive as populated from the first run. Runtimes were the same in both cases. But, there were few papers involved, given the equipment at hand.
+
+Overall, the logs indicate that the process takes longer as the user prompt becomes more complex or has less clarity. Another run asking the same basic question but less clarity took 4.1 hours.
+
+A time savings might be achieved if the retrieval date range could be directly input rather than left to the reasoning process.
+
+
 10/24/2026
 
 The original project's code has no provision for deterministically specifying the range of publication dates as a filter for searches. Am testing an attempt to add such a specification through the user prompt. Here is an example user prompt:
