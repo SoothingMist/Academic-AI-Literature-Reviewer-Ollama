@@ -8,6 +8,14 @@ Having taught college courses on three continents, one of the clearly-apparent b
 ***Results are as expected but very informative.***  
 ***Literature-Reviewer was written for a high-end machine and a large model.***  
 
+When using a tool like this, be careful. From articles I have read, such tools are 20% in error. This is especially a tale of caution when one realizes that a particular answer can be 80% right and 20% wrong. Only someone familiar with the field of inquiry will be able to recognize answers that are 20% wrong. So, be wary if you are investigating a topic that is totally new to you.
+
+Writing in the Epoch Times, 21-27 October 2026, page A20, An Educated Human Mind, Matthew Marro, a teacher, said, "Thanks to [these tools], I am able to research any topic in depth, explore various alternatives, and ask different questions that normally would take quite some time to be resolved. But I do not blindly trust everything [these tools] tell me. On the contrary, I constantly question it and evaluate the information using my personal knowledge and experience. This is what distinguishes the usage of [these tools] as an instrument from its usage as something which is supposed to do one's thinking."
+
+Remember that these tools are artificial. They are machines made, deployed, and used by humans. They are not intelligent. They are not sentient. They are not omnipotent. They rely on the humans who made them, supply data to them, program them, select responses from them, and apply them to some purpose. Humans, being imperfect, cannot make perfect machines. Nor can they derive perfect results from them. Humans, therefore, must apply their objective judgement in all phases of their development and application. Such judgement is grown through upbringing, education, and training.
+
+
+
 Original Author's ReadMe:
 
 # Academic-AI-Literature-Reviewer-Ollama
