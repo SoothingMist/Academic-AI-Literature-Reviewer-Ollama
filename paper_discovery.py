@@ -450,10 +450,19 @@ class EuropePMCClient:
     self.rate_limit_delay = config.get("rate_limit_delay", 0.15)
 
   def search(self, query: str, limit: int = None) -> SearchResult:
-    if limit is None:
-      limit = self.results_per_page
+    if limit is None: limit = self.results_per_page
     start_time = time.time()
     papers, error = [], None
+
+    # Refine the query.
+    index = query.rfind('(')
+    if index >= 0:
+      query_text = query[0 : index].strip()
+      start_date = query[index + 1 : index + 5].strip()
+      end_date = query[query.rfind(',') + 1 : query.rfind(')')].strip()
+      query = f'{query_text} AND OPEN_ACCESS:y AND PUB_YEAR:[{start_date} TO {end_date}]'
+    print(f"Searching EuropePMC for: '{query}' ...")
+
     try:
       total_to_fetch = min(limit, self.results_per_page * self.max_pages)
       cursor_mark = "*"
@@ -472,15 +481,12 @@ class EuropePMCClient:
           break
         data = resp.json()
         results = data.get("resultList", {}).get("result", [])
-        if not results:
-          break
+        if not results: break
         for item in results:
           p = self._parse(item)
-          if p:
-            papers.append(p)
+          if p: papers.append(p)
         next_cursor = data.get("nextCursorMark")
-        if not next_cursor or next_cursor == cursor_mark:
-          break
+        if not next_cursor or next_cursor == cursor_mark: break
         cursor_mark = next_cursor
         if len(papers) < total_to_fetch:
           time.sleep(self.rate_limit_delay)
@@ -696,7 +702,7 @@ class ArxivClient:
                    num_retries=3  # max network retries
                    )
 
-    # Define the search criteria.
+    # Refine the query.
     index = query.rfind('(')
     if index >= 0:
       query_text = query[0 : index].strip()
@@ -836,12 +842,14 @@ class PaperDiscoveryEngine:
     self.clients = {}
     self.api_stats = {}
 
-    for name, cls in [#("semantic_scholar", SemanticScholarClient), # requires api key
+    for name, cls in [
+      #("semantic_scholar", SemanticScholarClient), # requires api key
       #("openalex", OpenAlexClient),
       #("core", COREClient),                        # requires api key
-      #("europe_pmc", EuropePMCClient),
+      ("europe_pmc", EuropePMCClient),
       #("crossref", CrossrefClient),
-      ("Arxiv", ArxivClient)]:
+      #("Arxiv", ArxivClient)
+    ]:
       cfg = config.get(name, {})
       if cfg.get("enabled", True):
         self.clients[name] = cls(cfg)

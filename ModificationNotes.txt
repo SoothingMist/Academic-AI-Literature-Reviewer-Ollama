@@ -3,9 +3,14 @@ Modifications
 =============
 
 
+11/3/2026
+
+Modified paper_discovery.py to add year-range to EuropePMC queries. Also expanded query to indicate that only open-source documents are desired. Testing completed.
+
+
 10/30/2026
 
-Modified paper_discovery.py, PaperDiscoveryEngine/_download_and_extract, so that a paper is only downloaded if the paper is not in the database of papers already downloaded. As papers are downloaded, their pdf and txt versions are stored. This does take up more disk space but creates a type of memory for evolving user prompts on the same topic. It also saves data costs and hits the repositories less often. Also potentially mitigated is the possibility of duplicate papers from different repositories, although a checklist of papers employed while answering a user question is not maintained at the present time.
+Modified paper_discovery.py, PaperDiscoveryEngine/_download_and_extract, so that a paper is only downloaded if the paper is not in the database of papers already downloaded. As papers are downloaded, their pdf and txt versions are stored. This does take up more disk space but creates a type of memory for evolving user prompts on the same topic. It also saves data-transfer costs and hits the repositories less often. Also potentially mitigated is the possibility of duplicate papers from different repositories, although a checklist of papers employed while answering a user question is not maintained at the present time.
 
 Evolved the user prompt used to exercise the software:
 Question: What are ways to detect "fall armyworm" early? Instructions: - Restrict paper retrieval dates to the years 2023 through 2026 inclusive. - Where "fall armyworm" appears in a search query, "fall armyworm" must be maintained as a quoted phrase. - Attach the retrieval date range to the end of each search query by using this format: "(start year , end year)"
@@ -87,7 +92,7 @@ Line 102: changed default to "yes".
 
 Made first run with this question:
 What are ways to detect "fall armyworm" early? Restrict paper retrieval to the years 2023 through 2026 inclusive.
-Did not use any source that required an API key.
+Did not use any source that requires an API key. (core, semantic_scholar)
 Run took 100 minutes.
 Per original author's statement, results would be much better with a much-larger model and a high-end machine.
 Results did meet basic project success criteria.
