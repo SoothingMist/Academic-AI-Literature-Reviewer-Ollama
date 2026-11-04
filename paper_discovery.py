@@ -253,6 +253,18 @@ class OpenAlexClient:
       limit = self.results_per_page
     start_time = time.time()
     papers, error = [], None
+
+    # Refine the query.
+    start_date = None
+    end_date = None
+    index = query.rfind('(')
+    if index >= 0:
+      query_text = query[0 : index].strip()
+      start_date = query[index + 1 : index + 5].strip()
+      end_date = query[query.rfind(',') + 1 : query.rfind(')')].strip()
+      query = f'{query_text}'
+    print(f"Searching OpenAllex for: '{query}' ...")
+
     try:
       total_to_fetch = min(limit, self.results_per_page * self.max_pages)
       page = 1
@@ -260,10 +272,13 @@ class OpenAlexClient:
         params = {"search": query, "per_page": min(self.results_per_page, total_to_fetch - len(papers)),
                   "page": page, "sort": "cited_by_count:desc",
                   "select": "id,doi,title,authorships,publication_year,primary_location,"
-                            "cited_by_count,type,abstract_inverted_index,open_access,biblio"}
+                            "cited_by_count,type,abstract_inverted_index,open_access,biblio"
+                  }
         # Only sent when configured — an empty mailto is worse than none.
-        if self.email:
-          params["mailto"] = self.email
+        if self.email: params["mailto"] = self.email
+        if start_date and end_date:
+          params["filter"] =\
+            f"from_publication_date:{start_date}-01-01,to_publication_date:{end_date}-12-31"
         resp = requests.get(f"{self.base_url}/works", params=params, timeout=30)
         if resp.status_code != 200:
           error = f"HTTP {resp.status_code}: {resp.text[:200]}"
@@ -460,8 +475,9 @@ class EuropePMCClient:
       query_text = query[0 : index].strip()
       start_date = query[index + 1 : index + 5].strip()
       end_date = query[query.rfind(',') + 1 : query.rfind(')')].strip()
-      query = f'{query_text} AND OPEN_ACCESS:y AND PUB_YEAR:[{start_date} TO {end_date}]'
-    print(f"Searching EuropePMC for: '{query}' ...")
+      query = f'{query_text} AND PUB_YEAR:[{start_date} TO {end_date}]'
+    query += " AND OPEN_ACCESS:y"
+    #print(f"Searching EuropePMC for: '{query}' ...")
 
     try:
       total_to_fetch = min(limit, self.results_per_page * self.max_pages)
@@ -844,9 +860,9 @@ class PaperDiscoveryEngine:
 
     for name, cls in [
       #("semantic_scholar", SemanticScholarClient), # requires api key
-      #("openalex", OpenAlexClient),
+      ("openalex", OpenAlexClient),
       #("core", COREClient),                        # requires api key
-      ("europe_pmc", EuropePMCClient),
+      #("europe_pmc", EuropePMCClient),
       #("crossref", CrossrefClient),
       #("Arxiv", ArxivClient)
     ]:
