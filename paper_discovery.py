@@ -263,7 +263,7 @@ class OpenAlexClient:
       start_date = query[index + 1 : index + 5].strip()
       end_date = query[query.rfind(',') + 1 : query.rfind(')')].strip()
       query = f'{query_text}'
-    print(f"Searching OpenAllex for: '{query}' ...")
+    #print(f"Searching OpenAllex for: '{query}' ...")
 
     try:
       total_to_fetch = min(limit, self.results_per_page * self.max_pages)
@@ -563,10 +563,21 @@ class CrossrefClient:
     self.rate_limit_delay = config.get("rate_limit_delay", 0.15)
 
   def search(self, query: str, limit: int = None) -> SearchResult:
-    if limit is None:
-      limit = self.results_per_page
+    if limit is None: limit = self.results_per_page
     start_time = time.time()
     papers, error = [], None
+
+    # Refine the query.
+    start_date = None
+    end_date = None
+    index = query.rfind('(')
+    if index >= 0:
+      query_text = query[0 : index].strip()
+      start_date = query[index + 1 : index + 5].strip()
+      end_date = query[query.rfind(',') + 1 : query.rfind(')')].strip()
+      query = f'{query_text}'
+    #print(f"Searching CrossRef for: '{query}' ...")
+
     try:
       total_to_fetch = min(limit, self.results_per_page * self.max_pages)
       offset = 0
@@ -578,8 +589,10 @@ class CrossrefClient:
           "sort": "relevance",
         }
         # Polite-pool identification, only when actually configured.
-        if self.email:
-          params["mailto"] = self.email
+        if self.email: params["mailto"] = self.email
+        if start_date and end_date:
+          params["filter"] =\
+            f"from-pub-date:{start_date},until-pub-date:{end_date}"
         ua = (f"AcademicLitReview/1.0 (mailto:{self.email})"
               if self.email else "AcademicLitReview/1.0")
         resp = requests.get(f"{self.base_url}/works", params=params, timeout=30,
@@ -860,10 +873,10 @@ class PaperDiscoveryEngine:
 
     for name, cls in [
       #("semantic_scholar", SemanticScholarClient), # requires api key
-      ("openalex", OpenAlexClient),
+      #("openalex", OpenAlexClient),
       #("core", COREClient),                        # requires api key
       #("europe_pmc", EuropePMCClient),
-      #("crossref", CrossrefClient),
+      ("crossref", CrossrefClient),
       #("Arxiv", ArxivClient)
     ]:
       cfg = config.get(name, {})

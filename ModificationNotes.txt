@@ -3,13 +3,18 @@ Modifications
 =============
 
 
+11/5/2026
+
+Modified paper_discovery.py to add year-range to CrossRef queries. Testing completed.
+
+
 11/4/2026
 
 Found out that the Unpaywall REST API was retired on September 18, 2026. It now returns a "410 Gone" error. It was replaced by OpenAlex, the official free successor to Unpaywall built by the same team.
 
 What is strange is that there is a lot of Unpaywall code still resident in the program and its client is enabled. But, that client is not listed as a callable client during paper searches. Unpaywall code is used to filter for open-access papers. Hoping to understand more about this situation as time goes on.
 
-Modified paper_discovery.py to add year-range to OpenAlex queries.  Testing completed.
+Modified paper_discovery.py to add year-range to OpenAlex queries. Testing completed.
 
 
 11/3/2026
