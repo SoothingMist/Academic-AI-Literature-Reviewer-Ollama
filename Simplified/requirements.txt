@@ -1,1 +1,7 @@
-,,,,
+
+langchain_core
+langchain_ollama
+arxiv
+pymupdf
+bs4
+BeautifulSoup4
